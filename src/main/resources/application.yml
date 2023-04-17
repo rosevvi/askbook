@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://43.143.237.123/study
+#    password: FZifTeyAKCixcStf
+#    username: study
+    username: root
+    url: jdbc:mysql://localhost:3306/study
+    password: rose
+  redis:
+    port: 6379
+    password: rose
+#    host: 43.143.237.123
+    host: 127.0.0.1
+    database: 0 #连接那个数据库
+    jedis:
+      pool:
+        max-active: 8  #最大连接数
+        max-wait: 1ms  #连接池最大阻塞状态
+        max-idle: 4  #连接池最大空闲连接
+        min-idle: 0  #连接池最小空闲连接
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  global-config:
+    banner: false
+server:
+  port: 6060
+imagePath:
+  /usr/askbook/images
+#  D:\image\askBook
+tencent:
+  sms:
+    secretId: AKIDCzaxIkIa9ZmmZ6Zt0viHdnidaVN5bu1s
+    secretKey: iGnKnUhiV5SbWPEk23oKbeS0HI7lOvRc
+  cos:
+    secretId: AKIDCzaxIkIa9ZmmZ6Zt0viHdnidaVN5bu1s
+    secretKey: iGnKnUhiV5SbWPEk23oKbeS0HI7lOvRc
+    buckerName: askbook-1317227518
+    region: ap-beijing
+    url: https://askbook-1317227518.cos.ap-beijing.myqcloud.com
