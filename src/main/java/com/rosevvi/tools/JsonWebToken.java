@@ -37,7 +37,11 @@ public class JsonWebToken {
 
     public Long getCalim(String token){
         token = token.split("Bearer")[1].trim();
-        log.info(token+"!!!!!!!!!!!!!!!!");
+        log.info(token.substring(3)+"substring            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        if (token.startsWith("%20")){
+            token = token.substring(3);
+        }
+        log.info(token+"!!!!!!!!!!!!!!!!!!!");
         Long id = -1L;
         try {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY)).build();

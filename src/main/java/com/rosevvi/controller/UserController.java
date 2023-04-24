@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +36,12 @@ public class UserController {
     @Resource
     private RedisTemplate redisTemplate;
 
+    /**
+     * 登录
+     * @param request
+     * @param user
+     * @return
+     */
     @PostMapping("/login")
     public Result<User> login(HttpServletRequest request,@RequestBody User user){
         String verifyCode = (String) request.getSession().getAttribute("verifyCode");
@@ -73,6 +78,13 @@ public class UserController {
         return Result.success(Code.OK,"登录成功",user);
     }
 
+    /**
+     * 验证码
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/verifyCode")
     public Result<String> verifyCode(HttpServletRequest request, HttpServletResponse response) throws Exception{
         // 三个参数分别为宽、高、位数
@@ -86,6 +98,11 @@ public class UserController {
         return Result.success(Code.OK,"",captcha.toBase64());
     }
 
+    /**
+     * 注册
+     * @param user
+     * @return
+     */
     @PostMapping("/register")
     public Result<String> register(@RequestBody User user){
         LambdaQueryWrapper<User> lambdaQueryWrapper=new LambdaQueryWrapper<>();
@@ -102,12 +119,21 @@ public class UserController {
         return Result.success(Code.OK,"注册成功");
     }
 
+    /**
+     * 短信服务
+     * @param phone
+     */
     @PostMapping("/SMS/{phone}")
     public void smsService(@PathVariable("phone") String phone){
         SmsUtils smsUtils=new SmsUtils();
         smsUtils.getSms(phone);
     }
 
+    /**
+     * 测试
+     * @param user
+     * @return
+     */
     @PostMapping("/test")
     public Result<String> test(@RequestBody User user){
         JsonWebToken jsonWebToken=new JsonWebToken();
@@ -115,6 +141,10 @@ public class UserController {
         return Result.success(Code.OK,"测试成功");
     }
 
+    /**
+     * 获取当前用户信息
+     * @return
+     */
     @GetMapping()
     public Result<User> user(){
         Long userId = BaseContext.getThreadLocal();
@@ -123,6 +153,10 @@ public class UserController {
         return Result.success(Code.OK,"查询成功",user);
     }
 
+    /**
+     * 登出
+     * @return
+     */
     @PostMapping("/logout")
     public Result<String> logOut(){
         //把token从缓存中清除
@@ -131,8 +165,35 @@ public class UserController {
             redisTemplate.delete(BaseContext.getThreadLocal().toString());
             return Result.success(Code.OK,"登出成功");
         }
-
-
         return Result.error(Code.ERR,"登出失败");
+    }
+
+    /**
+     * 修改密码
+     * @param password
+     * @return
+     */
+    @PostMapping("/updatePassword")
+    public Result<String> updatePassword(@RequestParam String password){
+        User user = userService.getById(BaseContext.getThreadLocal());
+        String passwordMD5 = DigestUtils.md5DigestAsHex(password.getBytes());
+        user.setPassword(passwordMD5);
+        LambdaQueryWrapper<User> userLambdaQueryWrapper=new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(User::getId,user.getId());
+        userService.update(user,userLambdaQueryWrapper);
+        return Result.success(Code.OK,"更新成功");
+    }
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    @PostMapping("/updateUser")
+    public Result<String> updateUser(@RequestBody  User user){
+        LambdaQueryWrapper<User> userLambdaQueryWrapper=new LambdaQueryWrapper<>();
+        userLambdaQueryWrapper.eq(User::getId,BaseContext.getThreadLocal());
+        userService.update(user,userLambdaQueryWrapper);
+        return Result.success(Code.OK,"更新成功");
     }
 }

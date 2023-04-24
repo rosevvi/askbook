@@ -29,6 +29,7 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
             log.info("*****beforeHandshake******");
             HttpServletRequest httpServletRequest = ((ServletServerHttpRequest) request).getServletRequest();
             BaseContext.setThreadLocal(jsonWebToken.getCalim(httpServletRequest.getHeader("Sec-WebSocket-Protocol")));
+            log.info(jsonWebToken.getCalim(httpServletRequest.getHeader("Sec-WebSocket-Protocol"))+"<><><><><><<>><<><><>><<>");
             return true;
         }
         return false;
