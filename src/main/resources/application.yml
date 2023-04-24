@@ -33,11 +33,11 @@ imagePath:
 #  D:\image\askBook
 tencent:
   sms:
-    secretId: AKIDCzaxIkIa9ZmmZ6Zt0viHdnidaVN5bu1s
-    secretKey: iGnKnUhiV5SbWPEk23oKbeS0HI7lOvRc
+    secretId:
+    secretKey:
   cos:
-    secretId: AKIDCzaxIkIa9ZmmZ6Zt0viHdnidaVN5bu1s
-    secretKey: iGnKnUhiV5SbWPEk23oKbeS0HI7lOvRc
-    buckerName: askbook-1317227518
-    region: ap-beijing
-    url: https://askbook-1317227518.cos.ap-beijing.myqcloud.com
+    secretId:
+    secretKey:
+    buckerName:
+    region:
+    url:

@@ -39,7 +39,13 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         log.info("请求路径："+uri);
         //要放行的路径
         String[] urls={
-                "/backend/**",
+                "/index.html",
+                "/跳一跳.html",
+                "/vite.svg",
+                "/assets/*",
+                "/mota/*",
+                "/pintu/*",
+                "/qb.svg",
                 "/user/login",
                 "/user/register",
                 "/user/verifyCode",
@@ -48,6 +54,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         //判断是否需要放行
         if (isCheck(urls,uri)){
+            log.info("放行"+uri);
             return true;
         }
 
@@ -57,7 +64,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         //判断token是否在黑名单
         if (TokenList.tokens.stream().anyMatch(tokens -> token.equals(tokens))){
-            response.sendRedirect(request.getContextPath()+ "/backend/login.html");
+            response.sendRedirect(request.getContextPath()+ "/index.html");
             return false;
         }
 
@@ -66,7 +73,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         try {
             id = jsonWebToken.getCalim(token);
         } catch (Exception e) {
-            response.sendRedirect(request.getContextPath()+ "/backend/login.html");
+            response.sendRedirect(request.getContextPath()+ "/index.html");
             return false;
         }
         log.info(redisTemplate.opsForValue().get(id.toString())+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>???????");
@@ -78,7 +85,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         log.info("token为空或token过期未登录");
         //如果token未空 说明请求头里面没token 也就是没登录  直接俄重定向到首页
-        response.sendRedirect(request.getContextPath()+ "/backend/login.html");
+        response.sendRedirect(request.getContextPath()+ "/index.html");
         return false;
     }
 
