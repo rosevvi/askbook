@@ -15,6 +15,9 @@ import com.rosevvi.service.TypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,7 +55,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao,Question> imple
     }
 
 
-
+    /**
+     * 添加问题
+     * @param questionDto
+     * @return
+     */
     @Override
     public Long saveQuestionAndType(@RequestBody QuestionDto questionDto) {
         //拿到questionDto先把其分成两个  一个Question  一个typeList
@@ -85,7 +92,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao,Question> imple
         }
         LambdaQueryWrapper<Question> queryWrapper=new LambdaQueryWrapper<>();
         queryWrapper.last("limit "+String.valueOf(randomCount)+",10");
-        return this.list(queryWrapper);
+        List<Question> list = this.list(queryWrapper);
+        if (list==null||list.size()<1){
+            return null;
+        }
+        return list;
     }
 
     /**
@@ -125,6 +136,9 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionDao,Question> imple
         LambdaQueryWrapper<QuestionBridge> bridgeLambdaQueryWrapper=new LambdaQueryWrapper<>();
         bridgeLambdaQueryWrapper.eq(QuestionBridge::getTypeId,id);
         List<QuestionBridge> questionBridges = questionBridgeService.list(bridgeLambdaQueryWrapper);
+        if(questionBridges.size()<1){
+            return null;
+        }
         //将问题分类桥接集合中的问题id拿出来
         List<Long> questionIdList = questionBridges.stream().map(QuestionBridge::getQuestionId).collect(Collectors.toList());
         //利用questionId去查找问题

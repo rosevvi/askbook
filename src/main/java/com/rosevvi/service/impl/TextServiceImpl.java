@@ -17,6 +17,9 @@ import com.rosevvi.service.TypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -81,6 +84,9 @@ public class TextServiceImpl extends ServiceImpl<TextDao, Text> implements TextS
         LambdaQueryWrapper<TextBridge> bridgeLambdaQueryWrapper=new LambdaQueryWrapper<>();
         bridgeLambdaQueryWrapper.eq(TextBridge::getTypeId,id);
         List<TextBridge> textBridges = textBridgeService.list(bridgeLambdaQueryWrapper);
+        if (textBridges.size()<1){
+            return null;
+        }
         //获取到textBridges中的textId
         List<Long> textIds = textBridges.stream().map(TextBridge::getTextId).collect(Collectors.toList());
         //利用textIds查找文章

@@ -1,0 +1,1 @@
+import{_ as o,a as s,o as _,e as c,E as n}from"./index-8fb9ba12.js";const r={__name:"404",setup(p){const a=s(),t=()=>{n.alert("要跳转到首页吗","用户提示",{confirmButtonText:"是的",callback:e=>{e==="confirm"&&a.push("/")}})};return(e,l)=>(_(),c("div",{class:"page404",onClick:t}))}},f=o(r,[["__scopeId","data-v-a3e5afa2"]]);export{f as default};

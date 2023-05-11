@@ -2,17 +2,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://43.143.237.123/study
-    password: FZifTeyAKCixcStf
-    username: study
-#    username: root
-#    url: jdbc:mysql://localhost:3306/study
-#    password: rose
+    username: root
+    url: jdbc:mysql://localhost:3306/askbook
+    password:
   redis:
     port: 6379
-    password: rose
-    host: 43.143.237.123
-#    host: 127.0.0.1
+    password:
+    host: 127.0.0.1
     database: 0 #连接那个数据库
     jedis:
       pool:
@@ -28,9 +24,15 @@ mybatis-plus:
     banner: false
 server:
   port: 6060
+  servlet:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+  tomcat:
+    uri-encoding: GBK
 imagePath:
   /usr/askbook/images
-#  D:\image\askBook
 tencent:
   sms:
     secretId:

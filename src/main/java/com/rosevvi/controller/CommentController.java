@@ -16,7 +16,6 @@ import com.rosevvi.tools.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +86,7 @@ public class CommentController {
 
 
     /**
-     * 查询问题评论
+     * 查询文章评论
      * @param textId
      * @return
      */

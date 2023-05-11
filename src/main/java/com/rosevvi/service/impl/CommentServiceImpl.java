@@ -15,6 +15,7 @@ import com.rosevvi.service.TextService;
 import com.rosevvi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -59,12 +60,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, Comment> impleme
     }
 
     /**
-     * 谁收藏了
+     * 谁评论了
      * @return
      */
     @Override
     public List<CommentNewsDto> getWhoCommentMe() {
-        //查询谁点赞的
+        //查询谁评论的
         LambdaQueryWrapper<Comment> commentLambdaQueryWrapper=new LambdaQueryWrapper<>();
         commentLambdaQueryWrapper.eq(Comment::getToUserId, BaseContext.getThreadLocal());
         commentLambdaQueryWrapper.orderByDesc(Comment::getCreateTime);
@@ -93,6 +94,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentDao, Comment> impleme
         });
         return commentNewsDtos;
     }
+
 
 
 }

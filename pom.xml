@@ -10,8 +10,6 @@
     </parent>
     <groupId>com.rosevvi</groupId>
     <artifactId>askbook</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>askbook</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
@@ -102,6 +100,12 @@
             <version>1.1.0</version>
         </dependency>
 
+        <!--springCache依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <!--使用easy-captcha生成图片验证码-->
         <dependency>
             <groupId>com.github.whvcse</groupId>
@@ -115,19 +119,16 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
+        <finalName>app</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
     </build>
 

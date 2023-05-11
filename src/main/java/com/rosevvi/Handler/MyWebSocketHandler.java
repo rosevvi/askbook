@@ -82,7 +82,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler implements WebSocke
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) {
         synchronized (this) {
-            log.info(message.getPayload() + "<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             JSONObject jsonObject = JSONObject.parseObject(message.getPayload());
             Message data = jsonObject.getObject("data", Message.class);
             data.setUserId(BaseContext.getThreadLocal());
@@ -96,20 +95,20 @@ public class MyWebSocketHandler extends TextWebSocketHandler implements WebSocke
             if ("questionHomeMessage".equals(data.getFlag())) {
                 List<WebSocketSession> list = questionHome.get(data.getQuestionId().toString());
                 for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i)==session){
+                        continue;
+                    }
                     if (!list.get(i).isOpen()) {
                         list.remove(i);
                         continue;
                     }
                     try {
-                        log.info(list.get(i) + "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                        log.info(list.size() + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + list.get(i).isOpen() + questionUserList.toString());
                         list.get(i).sendMessage(new TextMessage(jsonObject.toString()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                 }
-                log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" + list.toString());
             }
 
             //判断消息flag是否为question
@@ -142,7 +141,6 @@ public class MyWebSocketHandler extends TextWebSocketHandler implements WebSocke
                     sessions.add(session);
                     //判断消息的flag是否未questionUserSize，是则代表有用户访问问题页面  给对应的数据加1
                     questionHome.put(data.getQuestionId().toString(), sessions);
-                    log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" + sessions.toString());
                     questionUserList.forEach((key, value) -> {
                         if (key.equals(data.getQuestionId())) {
                             questionUserList.put(key, value + 1);

@@ -11,6 +11,8 @@ import com.rosevvi.tools.Code;
 import com.rosevvi.tools.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -84,7 +86,11 @@ public class QuestionController {
      */
     @GetMapping("/pageRandom")
     public Result<List<Question>> pageRandom(){
-        return Result.success(Code.OK,"",questionService.pageForAnswerNum());
+        List<Question> questions = questionService.pageForAnswerNum();
+        if (questions == null){
+            return Result.error(Code.OK,"查询失败");
+        }
+        return Result.success(Code.OK,"",questions);
     }
 
 
@@ -111,6 +117,9 @@ public class QuestionController {
     @GetMapping("/byType/{id}")
     public Result<List<Question>> getQuestionByType(@PathVariable("id") Long id){
         List<Question> questions = questionService.getQuestionByType(id);
+        if (questions==null){
+            return Result.error(Code.OK,"问题为空");
+        }
         return Result.success(Code.OK,"查找成功",questions);
     }
 

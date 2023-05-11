@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rosevvi.config.BaseContext;
 import com.rosevvi.dao.CollectDao;
-import com.rosevvi.domain.*;
+import com.rosevvi.domain.Collect;
+import com.rosevvi.domain.Question;
+import com.rosevvi.domain.Text;
+import com.rosevvi.domain.User;
 import com.rosevvi.dto.CollectDto;
 import com.rosevvi.dto.CollectNewsDto;
-import com.rosevvi.dto.UserLikeNewsDto;
 import com.rosevvi.service.CollectService;
 import com.rosevvi.service.QuestionService;
 import com.rosevvi.service.TextService;
@@ -19,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author: rosevvi
@@ -55,12 +56,25 @@ public class CollectServiceImpl extends ServiceImpl<CollectDao, Collect> impleme
         List<Question> questions=new ArrayList<>();
         List<Text> texts=new ArrayList<>();
         list.forEach(item->{
-            questions.add(questionService.getById(item.getQuestionId()));
-            texts.add(textService.getById(item.getTextId()));
+            if (item.getQuestionId() != null){
+                Question question = questionService.getById(item.getQuestionId());
+                if (question != null){
+                    questions.add(question);
+                }
+            }
+            if (item.getTextId()!=null){
+                Text text = textService.getById(item.getTextId());
+                if (text != null){
+                    texts.add(text);
+                }
+            }
         });
+        System.err.println(questions);
+        System.err.println(texts);
         CollectDto collectDto=new CollectDto();
         collectDto.setQuestions(questions);
         collectDto.setTexts(texts);
+        System.err.println(collectDto);
         return collectDto;
     }
 
@@ -71,7 +85,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectDao, Collect> impleme
      */
     @Override
     public List<CollectNewsDto> getCollectByToUser() {
-        //查询谁点赞的
+        //查询谁收藏的
         LambdaQueryWrapper<Collect> collectLambdaQueryWrapper=new LambdaQueryWrapper<>();
         collectLambdaQueryWrapper.eq(Collect::getToUserId,BaseContext.getThreadLocal());
         collectLambdaQueryWrapper.orderByDesc(Collect::getCreateTime);
@@ -97,9 +111,9 @@ public class CollectServiceImpl extends ServiceImpl<CollectDao, Collect> impleme
             collectNewsDto.setQuestion(question);
             //判断问题是否为null  为空说名收藏的是文章
             if (question == null){
-                collectNewsDto.setMsg("点赞了你的文章");
+                collectNewsDto.setMsg("收藏了你的文章");
             }else {
-                collectNewsDto.setMsg("点赞了你的问题");
+                collectNewsDto.setMsg("收藏了你的问题");
             }
             collectNewsDtos.add(collectNewsDto);
         });

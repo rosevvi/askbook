@@ -12,6 +12,7 @@ import com.rosevvi.tools.Code;
 import com.rosevvi.tools.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,7 +60,6 @@ public class TextController {
      */
     @PostMapping()
     public Result<Long> save(@RequestBody TextDto textDto){
-
 //        textService.save(text);
         Long id = textService.saveTextAndType(textDto);
         return Result.success(Code.OK,"添加成功",id);
@@ -105,6 +105,9 @@ public class TextController {
     @GetMapping("/byType/{id}")
     public Result<List<Text>> getTextByType(@PathVariable("id") Long id){
         List<Text> texts = textService.getTextByType(id);
+        if (texts==null){
+            return Result.error(Code.OK,"查询为空");
+        }
         return Result.success(Code.OK,"查找成功",texts);
     }
 

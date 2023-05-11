@@ -1,9 +1,9 @@
 package com.rosevvi.config;
 
-import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
@@ -13,15 +13,22 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @description:
  */
 //@Configuration
-public class RedisConfig extends CachingConfigurerSupport {
+public class RedisConfig {
+
+
 
     @Bean
-    public RedisTemplate<Object,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory){
-        RedisTemplate<Object,Object> redisTemplate=new RedisTemplate<>();
-        //RedisTemplate使用的是JDK序列化，StringRedisTemplate使用的String的序列化,
-        //可读性好,将k和v都作为String进行处理
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        // key采用String的序列化方式
+        redisTemplate.setKeySerializer(StringRedisSerializer.UTF_8);
+        // value序列化方式采用jackson
+        redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
+        // hash的key也采用String的序列化方式
+        redisTemplate.setHashKeySerializer(StringRedisSerializer.UTF_8);
+        //hash的value序列化方式采用jackson
+        redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
