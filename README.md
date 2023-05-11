@@ -33,10 +33,10 @@
 `   mvn spring-boot:run`
 至此，您已经完成本项目的安装过程，可以访问相应的网站（http://localhost:6060/）进行测试和体验。
 
-## Tip
+# Tip
 sql文件在resource文件下
 需要修改的内容有：
 * mysql数据库账号密码
 * redis数据库账号密码
-* application.yml文件中腾讯云短信和对象存储服务的secretId和secretKey，当然buckerName、region、url也需要修改
+* 修改application.yml文件中腾讯云短信和对象存储服务的secretId和secretKey，当然buckerName、region、url也需要修改。使用者需自行申请阿里云短信和对象存储服务并填充application.yml文件中的密钥等信息。
 

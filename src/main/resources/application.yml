@@ -2,12 +2,14 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+
     username: root
-    url: jdbc:mysql://localhost:3306/askbook
+    url: jdbc:mysql://localhost:3306/study
     password:
   redis:
     port: 6379
     password:
+
     host: 127.0.0.1
     database: 0 #连接那个数据库
     jedis:
@@ -33,6 +35,7 @@ server:
     uri-encoding: GBK
 imagePath:
   /usr/askbook/images
+#  D:\image\askBook
 tencent:
   sms:
     secretId:
